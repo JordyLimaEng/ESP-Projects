@@ -207,8 +207,8 @@ const char* deviceName = "Lampadas - Casa 2";
 bool  flag = false;
 
 //SSID and Password of your WiFi router
-//const char* ssid = "Jordy_Mast Telecom";
-//const char* password = "jordylima";
+//const char* ssid = "Telecom";
+//const char* password = "senha";
 const char* ssid = "rede";
 const char* password = "senha";
 
