@@ -204,7 +204,7 @@ IPAddress dns(8, 8, 8, 8);  //DNS
 const char* deviceName = "Lampadas - Casa 2";
 
 #define Rele 2  
-bool  flag = false;
+bool  flag = false, timer=false;
 
 //SSID and Password of your WiFi router
 //const char* ssid = "Jordy_Mast Telecom";
@@ -252,7 +252,7 @@ void Tela_Ip_Rele_On() {
  
  //Serial.println("Requisição via IP -" + WiFi.localIP());
  //Serial.println("Lâmpada Ligada.");
- digitalWrite(Rele,HIGH); 
+ digitalWrite(Rele,HIGH);  
  flag = true;
  
  server.send(200, "text/html", "<html><h1>Lampada Ligada</html></h1>");
@@ -273,28 +273,21 @@ void Tela_Ip_Rele_Off() {
  server.send(200, "text/html", "<html><h1>Lampada Desligada</html></h1>");
 }
 
-void Tela_It_Rele_On() { 
- //header padrão para habilitar trânsito de dados entre as páginas.
- server.sendHeader("Access-Control-Allow-Origin", "*");
- server.sendHeader("Access-Control-Max-Age", "10000");
- server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
- server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
- 
- Serial.println("Requisição via Interface pelo IP -" + WiFi.localIP());
- Serial.println("Lâmpada Ligada.");
- digitalWrite(Rele,HIGH); 
-}
-
-void Tela_It_Rele_Off() { 
+void Timer_15s(){  
  //header padrão para habilitar trânsito de dados entre as páginas. 
  server.sendHeader("Access-Control-Allow-Origin", "*");
  server.sendHeader("Access-Control-Max-Age", "10000");
  server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
  server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
- 
- Serial.println("Requisição via Interface pelo IP -" + WiFi.localIP());
- Serial.println("Lâmpada Desligada.");
- digitalWrite(Rele,LOW);
+ if(timer==true){
+   server.send(200, "text/html"    ,"Já há um timer em execução!" );
+ }else{
+  timer==true;
+  Tela_Ip_Rele_On();
+  os_timer_setfn(&mTimer, Tela_Ip_Rele_Off, NULL);
+  os_timer_arm(&mTimer, 15000, false); 
+  server.send(200, "text/html"    ,"Timer de 15s ativado!" );   
+  }
 }
 
 //==============================================================
@@ -332,10 +325,21 @@ void setup(void){
   //Tratamento do que for recebido via HTTP::Request
   server.on("/"         ,Tela_Inicial     );      
   server.on("/lg_ext"   ,Tela_Ip_Rele_On  ); 
-  server.on("/lg_ext_1" ,Tela_It_Rele_On  );
-  server.on("/dlg_ext"  ,Tela_Ip_Rele_Off );  
-  server.on("/dlg_ext_1",Tela_It_Rele_Off );
+  server.on("/dlg_ext"  ,Tela_Ip_Rele_Off ); 
   server.on("/status"   ,Status           );
+  server.on("/timer_15s",Timer_15s        );
+  /*server.on("/timer_1h");
+  server.on("/timer_2h");
+  server.on("/timer_3h");
+  server.on("/timer_4h");
+  server.on("/timer_5h");
+  server.on("/timer_6h");
+  server.on("/timer_7h");
+  server.on("/timer_8h");
+  server.on("/timer_9h");
+  server.on("/timer_10h");
+  server.on("/timer_11h");
+  server.on("/timer_12h");*/
 
   server.begin();                  //Start server
   Serial.println("Server on - Esperando comandos.");
