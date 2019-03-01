@@ -204,7 +204,7 @@ IPAddress dns(8, 8, 8, 8);  //DNS
 const char* deviceName = "Lampadas - Casa 2";
 
 #define Rele 2  
-bool  flag = false, timer=false;
+bool  flag = false;
 
 //SSID and Password of your WiFi router
 //const char* ssid = "Telecom";
@@ -273,22 +273,6 @@ void Tela_Ip_Rele_Off() {
  server.send(200, "text/html", "<html><h1>Lampada Desligada</html></h1>");
 }
 
-void Timer_15s(){  
- //header padrão para habilitar trânsito de dados entre as páginas. 
- server.sendHeader("Access-Control-Allow-Origin", "*");
- server.sendHeader("Access-Control-Max-Age", "10000");
- server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
- server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
- if(timer==true){
-   server.send(200, "text/html"    ,"Já há um timer em execução!" );
- }else{
-  timer==true;
-  Tela_Ip_Rele_On();
-  os_timer_setfn(&mTimer, Tela_Ip_Rele_Off, NULL);
-  os_timer_arm(&mTimer, 15000, false); 
-  server.send(200, "text/html"    ,"Timer de 15s ativado!" );   
-  }
-}
 
 //==============================================================
 //                  SETUP
@@ -327,19 +311,6 @@ void setup(void){
   server.on("/lg_ext"   ,Tela_Ip_Rele_On  ); 
   server.on("/dlg_ext"  ,Tela_Ip_Rele_Off ); 
   server.on("/status"   ,Status           );
-  server.on("/timer_15s",Timer_15s        );
-  /*server.on("/timer_1h");
-  server.on("/timer_2h");
-  server.on("/timer_3h");
-  server.on("/timer_4h");
-  server.on("/timer_5h");
-  server.on("/timer_6h");
-  server.on("/timer_7h");
-  server.on("/timer_8h");
-  server.on("/timer_9h");
-  server.on("/timer_10h");
-  server.on("/timer_11h");
-  server.on("/timer_12h");*/
 
   server.begin();                  //Start server
   Serial.println("Server on - Esperando comandos.");
