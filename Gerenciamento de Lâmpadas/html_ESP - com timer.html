@@ -3,10 +3,6 @@
   <title>LAMPADAS - CASA 2</title>
   
   <script language="javascript">
-  
-  var IP = "http://138.185.242.135:8080/";
-  var xmlhttp = getXmlHttpRequest();
-    
   function id( el ){
 	return document.getElementById( el );
   }
@@ -19,7 +15,9 @@
     }
   }
   
-  function envia(comando){  
+  function envia(comando){  	  
+    var IP = "http://138.185.242.135:8080/";
+    var xmlhttp = getXmlHttpRequest();
     xmlhttp.open("POST", IP + comando, true);
     xmlhttp.onreadystatechange = function(){        
 		if (xmlhttp.readyState==4){
