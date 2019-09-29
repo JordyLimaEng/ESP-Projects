@@ -1,12 +1,12 @@
+
   <!DOCTYPE html>
   <html lang="pt-BR">
   <title>LAMPADAS - CASA 2</title>
   
   <script language="javascript">
   function id( el ){
-	return document.getElementById( el );
+  return document.getElementById( el );
   }
-
   function getXmlHttpRequest() { //Requisição HTTP
     if (window.XMLHttpRequest) {
       return new XMLHttpRequest();
@@ -15,48 +15,51 @@
     }
   }
   
-  function envia(comando){  	  
+  function envia(comando){      
     var IP = "http://138.185.242.135:8080/";
     var xmlhttp = getXmlHttpRequest();
     xmlhttp.open("POST", IP + comando, true);
     xmlhttp.onreadystatechange = function(){        
-		if (xmlhttp.readyState==4){
-			//console.log(xmlhttp.responseText);
-			//id("Resposta_da_ESP").innerHTML = xmlhttp.responseText;
-		}		  
-    }	
-     xmlhttp.send(null);	
+    if (xmlhttp.readyState==4){
+      console.log(xmlhttp.responseText);
+      //id("Resposta_da_ESP").innerHTML = xmlhttp.responseText;
+    }     
+    } 
+     xmlhttp.send(null);  
    }
-
   function Atualiza(){  //função simples para atualizar a página manualmente
         location.reload();
     }
   
   function Clock_Display(){ //mostra a hora atual
-	var c = new Date();
-	let d = c.getDate();
-	let m = c.getMonth() + 1;
-	let a = c.getFullYear();
-	let h = c.getHours();
-	let mn = c.getMinutes();
-	let s = c.getSeconds();
-	
-		
-	if(mn<10){ mn = "0" + mn;} //se menor que 10, acrecenta zero antes
-	if(s <10){  s = "0" +  s;}
-	if(m <10){  m = "0" +  m;}
-	if(h <10){  h = "0" +  h;}
-	
-	id('hora').innerHTML = h + ':' + mn + ':' + s;
-	id('data').innerHTML = d + '/' +  m + '/' + a;
-	
-	if(h == 18 && mn == 00 && s == 00){
-		envia("lg_ext");
-	}else if(h == 04 && mn == 00 && s == 00){
-		envia("dlg_ext");
-	}
-	
-	setTimeout('Clock_Display()',500);
+  var c = new Date();
+  let d = c.getDate();
+  let m = c.getMonth() + 1;
+  let a = c.getFullYear();
+  let h = c.getHours();
+  let mn = c.getMinutes();
+  let s = c.getSeconds();
+  
+    
+  if(mn<10){ mn = "0" + mn;} //se menor que 10, acrecenta zero antes
+  if(s <10){  s = "0" +  s;}
+  if(m <10){  m = "0" +  m;}
+  if(h <10){  h = "0" +  h;}
+  
+  //console.log(h + ':' + mn + ':' + s);
+  
+  id('hora').innerHTML = h + ':' + mn + ':' + s;
+  id('data').innerHTML = d + '/' +  m + '/' + a;
+  
+  if(h == 18 && mn == 00 && s == 00){
+    console.log("lg_ext");
+    envia("lg_ext");
+  }else if(h == 03 && mn == 00 && s == 00){
+  console.log("dlg_ext");
+    envia("dlg_ext");
+  }
+  
+  setTimeout('Clock_Display()',1000);
   }
   
 </script>
@@ -65,8 +68,8 @@
   <center>
   <h1>Controle de Lampadas da Casa 2 </h1><br>
   <table>
-		<tr><th><span id = "hora"></span></th></tr>	
-		<th><span id = "data"></span></th>			
+    <tr><th><span id = "hora"></span></th></tr> 
+    <th><span id = "data"></span></th>      
   </table>
   <hr>
   </center>
