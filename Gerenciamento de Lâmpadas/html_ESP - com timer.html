@@ -1,11 +1,10 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<title>LAMPADAS - CASA 2</title>
 
-  <!DOCTYPE html>
-  <html lang="pt-BR">
-  <title>LAMPADAS - CASA 2</title>
-  
-  <script language="javascript">
-  function id( el ){
-  return document.getElementById( el );
+<script language="javascript">
+  function id(el) {
+    return document.getElementById(el);
   }
   function getXmlHttpRequest() { //Requisição HTTP
     if (window.XMLHttpRequest) {
@@ -14,51 +13,156 @@
       return new ActiveXObject("Microsoft.XMLHTTP");
     }
   }
-  
-  function envia(comando){      
+
+  var historico = [];
+
+  function envia(comando) {
     var IP = "http://138.185.242.135:8080/";
     var xmlhttp = getXmlHttpRequest();
+    salvaHistorico(comando);
     xmlhttp.open("POST", IP + comando, true);
-    xmlhttp.onreadystatechange = function(){        
-    if (xmlhttp.readyState==4){
-      console.log(xmlhttp.responseText);
-      //id("Resposta_da_ESP").innerHTML = xmlhttp.responseText;
-    }     
-    } 
-     xmlhttp.send(null);  
-   }
-  function Atualiza(){  //função simples para atualizar a página manualmente
-        location.reload();
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.readyState == 4) {
+        console.log(xmlhttp.responseText);
+        //Se sucesso, salva no histórico
+        //salvaHistorico(comando);
+        //id("Resposta_da_ESP").innerHTML = xmlhttp.responseText;
+      }
     }
-  
-  function Clock_Display(){ //mostra a hora atual
-  var c = new Date();
-  
-  id('hora').innerHTML = c.toLocaleTimeString();
-  id('data').innerHTML = c.toLocaleDateString();
-  
-  if(c.toLocaleTimeString() === "18:00:00"){
-    console.log("lg_ext");
-    envia("lg_ext");
-  }else if(c.toLocaleTimeString() === "03:00:00"){
-    console.log("dlg_ext");
-    envia("dlg_ext");
+    xmlhttp.send(null);
   }
-  
-  setTimeout('Clock_Display()',1000);
+
+  function salvaHistorico(comando) {
+    var data = new Date();
+
+    if (comando === "lg_ext") {
+      historico.push("[" + data.toLocaleTimeString() + " - " + data.toLocaleDateString() + "] "
+        + "'Usuário' Ligou Lâmpada 'local'");
+      
+      id('bodyHistorico').innerHTML = "<tr><td>" + historico[0] + "</td></tr>";
+    } else {
+      historico.push("[" + data.toLocaleTimeString() + " - " + data.toLocaleDateString() + "] "
+        + "'Usuário' Desligou Lâmpada 'local'");
+      id('bodyHistorico').innerHTML = "<tr><td>" + historico + "</td></tr>";
+    }
+    console.log(historico);
   }
-  
+
+  function Atualiza() {  //função simples para atualizar a página manualmente
+    location.reload();
+  }
+
+  function Clock_Display() { //mostra a hora atual
+    var c = new Date();
+
+    id('hora').innerHTML = c.toLocaleTimeString();
+    id('data').innerHTML = c.toLocaleDateString();
+
+    if (c.toLocaleTimeString() === "17:20:45") {
+      console.log("lg_ext");
+      envia("lg_ext");
+    } else if (c.toLocaleTimeString() === "03:00:00") {
+      console.log("dlg_ext");
+      envia("dlg_ext");
+    }
+
+    setTimeout('Clock_Display()', 1000);
+    //salvaHistorico("lg_ext");
+  }
+
 </script>
 
-  <body onload = "Clock_Display()" onload = "Atualiza()">
+<style>
+  table.scroll {
+    width: 716px;
+    /* 140px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+    border: 2px solid black;
+  }
+
+  table.scroll tbody,
+  table.scroll thead tr {
+    display: block;
+  }
+
+  table.scroll tbody {
+    height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  table.scroll tbody td,
+  table.scroll thead th {
+    width: 140px;
+    border-right: 1px solid black;
+  }
+
+  table.scroll thead th:last-child {
+    width: 156px;
+    /* 140px + 16px scrollbar width */
+  }
+
+  thead tr th {
+    height: 30px;
+    line-height: 30px;
+    /*text-align: left;*/
+  }
+
+  tbody {
+    border-top: 2px solid black;
+  }
+
+  tbody td:last-child,
+  thead th:last-child {
+    border-right: none !important;
+  }
+</style>
+
+<body onload="Clock_Display()" onload="Atualiza()">
   <center>
-  <h1>Controle de Lampadas da Casa 2 </h1><br>
-  <table>
-    <tr><th><span id = "hora"></span></th></tr> 
-    <th><span id = "data"></span></th>      
-  </table>
-  <hr>
+    <h1>Controle de Lampadas da Casa 2 </h1><br>
+    <table>
+      <tr>
+        <th><span id="hora"></span></th>
+      </tr>
+      <th><span id="data"></span></th>
+    </table>
+    <hr>
   </center>
-  
-  </body>
-  </html>
+
+  <table class="scroll">
+    <thead>
+      <center>
+      <tr>
+        <th>Histórico de ativação</th>
+      </tr>
+      </center>
+    </thead>
+    <tbody id="bodyHistorico">
+      <tr>
+        <td>Content 1</td>
+      </tr>
+      <tr>
+        <td>Content 1</td>
+      </tr>
+      <tr>
+        <td>Content 1</td>
+      </tr>
+      <tr>
+        <td>Content 1</td>
+      </tr>
+      <tr>
+        <td>Content 1</td>
+      </tr>
+      <tr>
+        <td>Content 1</td>
+      </tr>
+      <tr>
+        <td>Content 1</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+
+</html>
