@@ -33,29 +33,15 @@
   
   function Clock_Display(){ //mostra a hora atual
   var c = new Date();
-  let d = c.getDate();
-  let m = c.getMonth() + 1;
-  let a = c.getFullYear();
-  let h = c.getHours();
-  let mn = c.getMinutes();
-  let s = c.getSeconds();
   
-    
-  if(mn<10){ mn = "0" + mn;} //se menor que 10, acrecenta zero antes
-  if(s <10){  s = "0" +  s;}
-  if(m <10){  m = "0" +  m;}
-  if(h <10){  h = "0" +  h;}
+  id('hora').innerHTML = c.toLocaleTimeString();
+  id('data').innerHTML = c.toLocaleDateString();
   
-  //console.log(h + ':' + mn + ':' + s);
-  
-  id('hora').innerHTML = h + ':' + mn + ':' + s;
-  id('data').innerHTML = d + '/' +  m + '/' + a;
-  
-  if(h == 18 && mn == 00 && s == 00){
+  if(c.toLocaleTimeString() === "18:00:00"){
     console.log("lg_ext");
     envia("lg_ext");
-  }else if(h == 03 && mn == 00 && s == 00){
-  console.log("dlg_ext");
+  }else if(c.toLocaleTimeString() === "03:00:00"){
+    console.log("dlg_ext");
     envia("dlg_ext");
   }
   
