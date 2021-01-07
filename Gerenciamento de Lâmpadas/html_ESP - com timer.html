@@ -39,11 +39,31 @@
       historico.push("[" + data.toLocaleTimeString() + " - " + data.toLocaleDateString() + "] "
         + "'Usuário' Ligou Lâmpada 'local'");
       
-      id('bodyHistorico').innerHTML = "<tr><td>" + historico[0] + "</td></tr>";
+      var a = document.createElement("TR");
+      var b = document.createElement("TD");
+      
+      // historico.forEach(element => {
+        var c = document.createTextNode("[" + data.toLocaleTimeString() + " - " + data.toLocaleDateString() + "] "
+        + "'Usuário' Ligou Lâmpada 'local'");
+        b.appendChild(c);
+        a.appendChild(b);
+        id('bodyHistorico').appendChild(a);
+      // });
+
     } else {
       historico.push("[" + data.toLocaleTimeString() + " - " + data.toLocaleDateString() + "] "
         + "'Usuário' Desligou Lâmpada 'local'");
-      id('bodyHistorico').innerHTML = "<tr><td>" + historico + "</td></tr>";
+      
+      var a = document.createElement("TR");
+      var b = document.createElement("TD");
+      
+      // historico.forEach(element => {
+        var c = document.createTextNode("[" + data.toLocaleTimeString() + " - " + data.toLocaleDateString() + "] "
+        + "'Usuário' Desligou Lâmpada 'local'");
+        b.appendChild(c);
+        a.appendChild(b);
+        id('bodyHistorico').appendChild(a);
+      // });
     }
     console.log(historico);
   }
@@ -58,16 +78,22 @@
     id('hora').innerHTML = c.toLocaleTimeString();
     id('data').innerHTML = c.toLocaleDateString();
 
-    if (c.toLocaleTimeString() === "17:20:45") {
-      console.log("lg_ext");
+    if (c.toLocaleTimeString() === "15:20:00") {
       envia("lg_ext");
-    } else if (c.toLocaleTimeString() === "03:00:00") {
-      console.log("dlg_ext");
+    } else if (c.toLocaleTimeString() === "15:20:10") {
       envia("dlg_ext");
     }
+    setTimeout('Clock_Display()', 1000);  
+  }
 
-    setTimeout('Clock_Display()', 1000);
-    //salvaHistorico("lg_ext");
+  function mostraHistorico(){
+    if(id('historico').style.visibility == ""){
+      id('historico').style.visibility = "hidden";
+      id('btHistorico').innerHTML = "Mostrar Histórico";
+    }else{
+      id('historico').style.visibility = "";
+      id('btHistorico').innerHTML = "Fechar Histórico";
+    }
   }
 
 </script>
@@ -82,18 +108,19 @@
 
   table.scroll tbody,
   table.scroll thead tr {
-    display: block;
+    display: inline-block;
+    width: 100%;
   }
 
   table.scroll tbody {
-    height: 100px;
+    height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   table.scroll tbody td,
   table.scroll thead th {
-    width: 140px;
+    width: 400px;
     border-right: 1px solid black;
   }
 
@@ -128,9 +155,11 @@
       <th><span id="data"></span></th>
     </table>
     <hr>
+    <button id = 'btHistorico' type="submit" onclick="mostraHistorico()">Mostrar Histórico</button>
   </center>
 
-  <table class="scroll">
+  
+  <table id="historico" style="visibility:hidden" class="scroll">
     <thead>
       <center>
       <tr>
@@ -139,27 +168,6 @@
       </center>
     </thead>
     <tbody id="bodyHistorico">
-      <tr>
-        <td>Content 1</td>
-      </tr>
-      <tr>
-        <td>Content 1</td>
-      </tr>
-      <tr>
-        <td>Content 1</td>
-      </tr>
-      <tr>
-        <td>Content 1</td>
-      </tr>
-      <tr>
-        <td>Content 1</td>
-      </tr>
-      <tr>
-        <td>Content 1</td>
-      </tr>
-      <tr>
-        <td>Content 1</td>
-      </tr>
     </tbody>
   </table>
 
